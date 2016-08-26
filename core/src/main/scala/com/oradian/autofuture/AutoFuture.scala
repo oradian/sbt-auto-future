@@ -1,9 +1,9 @@
 package com.oradian.autofuture
 
-import scala.meta._
+import scala.annotation.tailrec
 
 trait AutoFuture {
-  def apply(source: Tree): Tree
+  def apply(source: String): AutoFuture.Result
 }
 
 object AutoFuture {
@@ -18,17 +18,26 @@ object AutoFuture {
     case object Noop extends Result
   }
 
-  def apply(source: String): Result = {
-    source.parse[Source] match {
-      case Parsed.Success(parsed) =>
-        /* Chain all tranformations defined in tasks */
-        val transformed = tasks.foldLeft(parsed: Tree) { (current, task) => task(current) }
+  def apply(source: String): Result =
+    process(source, tasks, Result.Noop)
 
-        /* Detect noop instead of recreating the same source from the parsed tree */
-        if (transformed eq parsed) Result.Noop else Result.Success(transformed.toString)
+  @tailrec
+  private[autofuture] def process(source: String, tasks: Seq[AutoFuture], last: Result): Result = {
+    tasks match {
+      case Nil =>
+        last
 
-      case Parsed.Error(pos, message, details) =>
-        Result.Error(message)
+      case head :: tail =>
+        head(source) match {
+          case error: Result.Error =>
+            error
+
+          case newLast @ Result.Success(source) =>
+            process(source, tail, newLast)
+
+          case Result.Noop =>
+            last
+        }
     }
   }
 }
