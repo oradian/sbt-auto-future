@@ -33,7 +33,7 @@ class ProcedureSyntaxConversionSpec extends Specification {
     val expected = source.replaceAll(Marker, "")
     val origin = source.replaceAll(DEFN, "").replaceAll(DECL, "")
 
-    AutoFuture.process(origin, Seq(ProcedureSyntaxConversion), AutoFuture.Result.Noop) ====
+    AutoFuture.process(origin, List(ProcedureSyntaxConversion), AutoFuture.Result.Noop) ====
       AutoFuture.Result.Success(expected)
   }
 

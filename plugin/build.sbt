@@ -1,13 +1,8 @@
-name := "auto-future"
-version := "0.1.0"
+name := "sbt-auto-future"
 
-libraryDependencies ++= Seq(
-  "org.scalameta" %% "scalameta" % "1.0.0"
-, "org.scala-lang" % "scala-reflect" % scalaVersion.value
-, "org.specs2" %% "specs2-scalacheck" % "3.8.4" % Test
-)
+sbtPlugin := true
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.10.6"
 scalacOptions ++= Seq(
   "-deprecation"
 , "-encoding","UTF-8"
