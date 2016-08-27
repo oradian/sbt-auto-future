@@ -1,7 +1,9 @@
 name := "auto-future"
+version := "0.1.0"
 
 libraryDependencies ++= Seq(
   "org.scalameta" %% "scalameta" % "1.0.0"
+, "org.scala-lang" % "scala-reflect" % scalaVersion.value
 , "org.specs2" %% "specs2-scalacheck" % "3.8.4" % Test
 )
 

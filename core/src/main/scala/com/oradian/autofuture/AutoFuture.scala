@@ -7,7 +7,7 @@ trait AutoFuture {
 }
 
 object AutoFuture {
-  val tasks = IndexedSeq[AutoFuture](
+  val tasks = List[AutoFuture](
     ProcedureSyntaxConversion
   )
 
@@ -22,7 +22,7 @@ object AutoFuture {
     process(source, tasks, Result.Noop)
 
   @tailrec
-  private[autofuture] def process(source: String, tasks: Seq[AutoFuture], last: Result): Result = {
+  private[autofuture] def process(source: String, tasks: List[AutoFuture], last: Result): Result = {
     tasks match {
       case Nil =>
         last
