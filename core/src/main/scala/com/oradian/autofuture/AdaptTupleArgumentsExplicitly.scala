@@ -18,7 +18,7 @@ object AdaptTupleArgumentsExplicitly extends AutoFuture {
     val close = tree.tokens.reverse.find {
       case _: Token.RightParen => true
       case _ => false
-    }.getOrElse(sys.error("Could not find first open parenthesis")).pos.start.offset
+    }.getOrElse(sys.error("Could not find last closed parenthesis")).pos.start.offset
 
     Injection(open, close)
   }
