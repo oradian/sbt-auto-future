@@ -11,6 +11,12 @@ class ProcedureSyntaxConversionSpec extends Specification {
       definition in a class                      $defnInClass
       definition in an object                    $defnInObject
 
+    Noops
+      noop in empty                              $noopEmpty
+      noop in not applicable                     $noopNa
+      noop in decl                               $noopDecl
+      noop in defn                               $noopDefn
+
     Spaces in definitions
       0 spaces                                   $defn0Space
       1 space                                    $defn1Space
@@ -22,14 +28,14 @@ class ProcedureSyntaxConversionSpec extends Specification {
       nested conversions with duck typing        $testDuckTyping
   """
 
-  private val Marker = java.util.UUID.randomUUID.toString
-  private val DECL = Marker + ": Unit"
-  private val DEFN = Marker + ": Unit ="
+  private[this] val Marker = java.util.UUID.randomUUID.toString
+  private[this] val DECL = Marker + ": Unit"
+  private[this] val DEFN = Marker + ": Unit ="
 
-  private val BOTH_TYPE = Marker + "BothType"
-  private val BOTH_BODY = Marker + "BothBody"
+  private[this] val BOTH_TYPE = Marker + "BothType"
+  private[this] val BOTH_BODY = Marker + "BothBody"
 
-  private def testOne(source: String) = {
+  private[this] def testOne(source: String) = {
     val expected = source.replaceAll(Marker, "")
     val origin = source.replaceAll(DEFN, "").replaceAll(DECL, "")
 
@@ -37,11 +43,20 @@ class ProcedureSyntaxConversionSpec extends Specification {
       AutoFuture.Result.Success(expected)
   }
 
-  private def testBoth(source: String) = {
+  private[this] def testNone(source: String) =
+    AutoFuture.process(source, List(ProcedureSyntaxConversion), AutoFuture.Result.Noop) ====
+      AutoFuture.Result.Noop
+
+  private[this] def testBoth(source: String) = {
     val declTest = source.replaceAll(BOTH_TYPE, DECL).replaceAll(BOTH_BODY, "")
     val defnTest = source.replaceAll(BOTH_TYPE, DEFN).replaceAll(BOTH_BODY, "{ body }")
     testOne(declTest) and testOne(defnTest)
   }
+
+  def noopEmpty = testNone("")
+  def noopNa    = testNone("""object Foo { def x: Int = 1 }""")
+  def noopDecl  = testNone("""trait Foo { def x: Unit }""")
+  def noopDefn  = testNone("""object Foo { def x: Unit = println("Hi!") }""")
 
   // Injections into classes
   def declInTrait         = testOne(s"""trait Foo { def x${DECL} }""")

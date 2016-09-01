@@ -9,6 +9,7 @@ trait AutoFuture {
 object AutoFuture {
   val tasks = List[AutoFuture](
     ProcedureSyntaxConversion
+  , AdaptTupleArgumentsExplicitly
   )
 
   sealed trait Result
