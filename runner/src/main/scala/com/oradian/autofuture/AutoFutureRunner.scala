@@ -22,7 +22,7 @@ object AutoFutureRunner extends App {
           logger.debug("Auto-Futuring Scala source: {}", source.path)
           source.write(body)
         case AutoFuture.Result.Error(error) =>
-          logger.warn("Error while parsing Scala source: {}", error)
+          logger.warn("Error while parsing Scala source: {}\n{}", source.path: Any, error: Any)
         case AutoFuture.Result.Noop =>
           logger.trace("Noop on: {}", source.path)
       }

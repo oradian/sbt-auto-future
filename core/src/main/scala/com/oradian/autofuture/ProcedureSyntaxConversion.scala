@@ -52,8 +52,6 @@ object ProcedureSyntaxConversion extends AutoFuture {
     Injection(offset, defn)
   }
 
-  private[this] val WhitespaceSuffixPattern = "(?s)(.*?)([ \t]*)"r
-
   def apply(source: String): AutoFuture.Result = {
     source.parse[Source] match {
       case Success(parsed) =>
@@ -73,10 +71,9 @@ object ProcedureSyntaxConversion extends AutoFuture {
           val sb = new StringBuilder
           var last = 0
           for (injection <- injections.sortBy(_.offset)) {
-            val WhitespaceSuffixPattern(before, after) = source.substring(last, injection.offset)
+            val before = source.substring(last, injection.offset)
             (sb ++= before
-               ++= (if (injection.defn) ": Unit =" else ": Unit")
-               ++= after)
+                ++= (if (injection.defn) ": Unit =" else ": Unit"))
             last = injection.offset
           }
 
@@ -85,7 +82,7 @@ object ProcedureSyntaxConversion extends AutoFuture {
         }
 
       case Error(pos, message, details) =>
-        AutoFuture.Result.Error(message)
+        AutoFuture.Result.Error(s"At line ${pos.start.line}: $message")
     }
   }
 }
