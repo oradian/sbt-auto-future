@@ -37,7 +37,7 @@ object AutoFuture {
             process(source, tail, newLast)
 
           case Result.Noop =>
-            last
+            process(source, tail, last)
         }
     }
   }

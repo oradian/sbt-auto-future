@@ -27,7 +27,7 @@ class AdaptTupleArgumentsExplicitlySpec extends Specification {
     AutoFuture.process(source, List(AdaptTupleArgumentsExplicitly), AutoFuture.Result.Noop) ====
       AutoFuture.Result.Noop
 
-  private def test(source: String) = {
+  private[this] def test(source: String) = {
     val original = source.replace(`(`, "").replace(`)`, "")
     val expected = source.replace(Marker, "")
 
