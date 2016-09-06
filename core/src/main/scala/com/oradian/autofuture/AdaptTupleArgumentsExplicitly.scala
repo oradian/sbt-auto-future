@@ -27,12 +27,16 @@ object AdaptTupleArgumentsExplicitly extends AutoFuture {
     source.parse[Source] match {
       case Success(parsed) =>
         val injections = parsed collect {
-          /* Transform abstract definitions, match if return type tokens are empty (procedure syntax) */
+          /* Transform Some.apply(<multiple parameters>) */
           case tree @ Term.Apply(Term.Name("Some"), args) if args.size > 1 =>
             locateInjection(tree)
 
-          /* Transform abstract definitions, match if return type tokens are empty (procedure syntax) */
+          /* Transform Option.apply(<multiple parameters>) */
           case tree @ Term.Apply(Term.Name("Option"), args) if args.size > 1 =>
+            locateInjection(tree)
+
+          /* Transform arrow association */
+          case tree @ Term.ApplyInfix(_, Term.Name("->"), _, args) if args.size > 1 =>
             locateInjection(tree)
         }
 

@@ -4,6 +4,10 @@ import org.specs2.Specification
 
 class AdaptTupleArgumentsExplicitlySpec extends Specification {
   def is = s2"""
+    Adapted arrow tuple
+      pair                       $arrowPair
+      tripple                    $arrowTripple
+
     Adapted tuples
       pair                       $tuplePair
       tripple                    $tupleTripple
@@ -35,6 +39,21 @@ class AdaptTupleArgumentsExplicitlySpec extends Specification {
       AutoFuture.Result.Success(expected)
   }
 
+  def arrowPair = test(s"""
+    trait Foo {
+      Map(1 -> (${`(`}1,2${`)`}))
+    }""")
+
+  def arrowTripple = test(s"""
+    trait Foo {
+      Map(1 -> (${`(`} 1, 2, 3 ${`)`}))
+    }""")
+
+  def appendPair = test(s"""
+    trait Foo {
+      Seq(1 -> 2, 3 -> 4) :+ (${`(`}5, 6${`)`})
+    }""")
+
   def tuplePair = test(s"""
     trait Foo {
       Some(${`(`}1,2${`)`})
@@ -42,7 +61,7 @@ class AdaptTupleArgumentsExplicitlySpec extends Specification {
 
   def tupleTripple = test(s"""
     trait Foo {
-      Some(${`(`}1, 2, 3${`)`})
+      Some(${`(`} 1, 2, 3 ${`)`})
     }""")
 
   def tuple23 = test(s"""

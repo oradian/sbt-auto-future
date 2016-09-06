@@ -1,0 +1,27 @@
+language: scala
+
+branches:
+  only:
+    - master
+
+scala:
+  - "2.11.8"
+
+jdk:
+  - oraclejdk8
+  - oraclejdk7
+  - openjdk7
+  - openjdk6
+
+sudo: false
+
+notifications:
+  email:
+    recipients:
+      - marko.elezovic@oradian.com
+
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION coverage test publishLocal
+
+after_success:
+  - pip install --user codecov && codecov

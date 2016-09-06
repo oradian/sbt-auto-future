@@ -24,7 +24,7 @@ object ProcedureSyntaxConversion extends AutoFuture {
    * Also, we cannot just trim whitespaces to the right because of potential line comments.
    * See the accompanying spec for more details */
   private[this] def locateInjection(tree: Tree, rt: Type.Name, defn: Boolean): Injection = {
-    val tokens = tree.tokens.tokens
+    val tokens = tree.tokens
     val lastOffset = rt.pos.start.offset
 
     @tailrec
